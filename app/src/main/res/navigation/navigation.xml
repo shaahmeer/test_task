@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/favJobFragment">
+
+    <fragment
+        android:id="@+id/favJobFragment"
+        android:name="com.example.testtask.FavJobFragment"
+        android:label="fragment_fav_job"
+        tools:layout="@layout/fragment_fav_job" />
+    <fragment
+        android:id="@+id/jobFragment"
+        android:name="com.example.testtask.JobFragment"
+        android:label="JobFragment" >
+        <action
+            android:id="@+id/action_jobFragment_to_favJobFragment"
+            app:destination="@id/favJobFragment" />
+    </fragment>
+</navigation>
