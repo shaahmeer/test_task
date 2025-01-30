@@ -11,8 +11,9 @@ import com.example.testtask.databinding.ItemJobsBinding
 class Jobadapter(
     var jobs: List<Job>,
     private val onFavoriteClick: (Int) -> Unit,
-    kFunction1: (Int) -> Unit
-) : RecyclerView.Adapter<Jobadapter.JobViewHolder>() {
+    kFunction1: (Int) -> Unit,
+
+    ) : RecyclerView.Adapter<Jobadapter.JobViewHolder>() {
 
     inner class JobViewHolder(private val binding: ItemJobsBinding) :
         RecyclerView.ViewHolder(binding.root) {

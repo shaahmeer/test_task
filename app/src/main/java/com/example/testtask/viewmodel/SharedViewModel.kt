@@ -35,8 +35,12 @@ class SharedViewModel : ViewModel() {
             }
         }
     }
+    fun addFavoriteJob(job: Job) {
+        val currentFavorites = _favoriteJobs.value?.toMutableList() ?: mutableListOf()
+        currentFavorites.add(job)
+        _favoriteJobs.value = currentFavorites
+    }
 
-    // Toggle favorite status for a job
     fun toggleFavorite(job: Job) {
         val currentJobs = _allJobs.value?.toMutableList() ?: return
         val index = currentJobs.indexOf(job)
@@ -44,8 +48,10 @@ class SharedViewModel : ViewModel() {
             val updatedJob = job.copy(isFavorite = !job.isFavorite)
             currentJobs[index] = updatedJob
             _allJobs.value = currentJobs
+
             _filteredJobs.value = _filteredJobs.value?.map {
                 if (it == job) updatedJob else it
+
             }
             updateFavoriteJobs() // Update the favorite jobs list
         }

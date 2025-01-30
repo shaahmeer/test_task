@@ -1,5 +1,6 @@
 package com.example.testtask
 
+import JobDetailsViewModel
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -7,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.core.content.ContextCompat
 import com.example.testtask.databinding.ActivityJobdetailsBinding
-import com.example.testtask.viewmodel.JobDetailsViewModel
 import com.google.android.material.button.MaterialButton
 
 class Jobdetails : AppCompatActivity() {

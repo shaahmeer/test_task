@@ -14,14 +14,14 @@
 
         <!-- Search Bar -->
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             app:cardBackgroundColor="#1C1C1E"
             app:cardCornerRadius="8dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -71,18 +71,19 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/verticalRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_weight="1"
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingHorizontal="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loadMoreButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_marginBottom="40dp"
             android:backgroundTint="#4285F4"
             android:text="Еще 143 вакансии"
             android:textAllCaps="false"/>

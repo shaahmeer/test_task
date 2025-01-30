@@ -1,53 +1,61 @@
 package com.example.testtask
 
+
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
+
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.example.testtask.databinding.ActivityMainBinding
+import androidx.lifecycle.ViewModelProvider
+import com.example.testtask.FavJobFragment
+import com.example.testtask.JobFragment
+import com.example.testtask.R
 import com.example.testtask.viewmodel.NavigationViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private val navigationViewModel: NavigationViewModel by viewModels()
+    private lateinit var navigationViewModel: NavigationViewModel
+    private lateinit var jobFragment: JobFragment
+    private lateinit var favJobFragment: FavJobFragment
+    private var activeFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        enableEdgeToEdge() // Ensures proper edge-to-edge behavior
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        // Handling edge-to-edge window insets
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            WindowInsetsCompat.CONSUMED
-        }
+        navigationViewModel = ViewModelProvider(this)[NavigationViewModel::class.java]
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        jobFragment = JobFragment()
+        favJobFragment = FavJobFragment()
 
-        // Observe current fragment from ViewModel
-        navigationViewModel.currentFragment.observe(this, { fragment ->
-            replaceFragment(fragment)
-        })
+        activeFragment = jobFragment
 
-        // Set up BottomNavigationView
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            // Use ViewModel to handle navigation
-            navigationViewModel.navigateTo(item.itemId)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, favJobFragment, "FavJobFragment")
+            .hide(favJobFragment)
+            .commit()
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, jobFragment, "JobFragment")
+            .commit()
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_search -> showFragment(jobFragment)
+                R.id.navigation_favorites -> showFragment(favJobFragment)
+            }
             true
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
+    private fun showFragment(fragment: Fragment) {
+        if (fragment != activeFragment) {
+            supportFragmentManager.beginTransaction()
+                .hide(activeFragment!!)
+                .show(fragment)
+                .commit()
+            activeFragment = fragment
+        }
     }
 }

@@ -1,21 +1,18 @@
 package com.example.testtask
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import com.example.testtask.databinding.FragmentFavJobBinding
-
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.testtask.databinding.FragmentFavJobBinding
 import com.example.testtask.adatper.FavJobAdapter
-import com.example.testtask.data.Job
 import com.example.testtask.viewmodel.SharedViewModel
-
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class FavJobFragment : Fragment() {
 
@@ -36,14 +33,35 @@ class FavJobFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Set up RecyclerView
         binding.favRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = favJobAdapter
         }
-
-        // Observe favorite jobs
         sharedViewModel.favoriteJobs.observe(viewLifecycleOwner) { favoriteJobs ->
-            favJobAdapter.updateData(favoriteJobs) // Update the adapter with favorite jobs
+            Log.d("FavJobFragment", "Favorite Jobs: ${favoriteJobs.size}")
+        }
+
+
+        // Observe favoriteJobs and update RecyclerView and badge
+        sharedViewModel.favoriteJobs.observe(viewLifecycleOwner) { favoriteJobs ->
+            if (favoriteJobs != null) {
+                favJobAdapter.updateData(favoriteJobs)
+                updateFavoritesBadge(favoriteJobs.size) // Update the badge count
+            }
+        }
+    }
+
+    private fun updateFavoritesBadge(favoriteCount: Int) {
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val menuItem = bottomNavigationView.menu.findItem(R.id.navigation_favorites) // Use the correct menu ID
+
+        val badge = bottomNavigationView.getOrCreateBadge(menuItem.itemId) // Get or create a badge
+        if (favoriteCount > 0) {
+            badge.isVisible = true
+            badge.number = favoriteCount // Set the count
+        } else {
+            badge.isVisible = false // Hide the badge if no favorites
         }
     }
 
@@ -54,6 +72,7 @@ class FavJobFragment : Fragment() {
 
     private fun onApplyClick(position: Int) {
         val job = favJobAdapter.jobs[position]
+        Toast.makeText(requireContext(), "Apply clicked for job: ${job.jobTitle}", Toast.LENGTH_SHORT).show()
         Toast.makeText(requireContext(), "Applied for ${job.jobTitle}", Toast.LENGTH_SHORT).show()
     }
 

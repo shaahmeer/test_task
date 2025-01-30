@@ -1,9 +1,11 @@
 package com.example.testtask.adatper
 
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testtask.Jobdetails
 import com.example.testtask.data.Job
 import com.example.testtask.databinding.ItemJobsBinding
 import kotlin.reflect.KFunction1
@@ -33,7 +35,24 @@ class FavJobAdapter(
             binding.btnFavorite.setOnClickListener {
                 onRemoveFavoriteClick(adapterPosition) // This is for removing from favorites
             }
-            binding.btnApply.setOnClickListener { onApplyClick(adapterPosition) }
+            binding.btnApply.setOnClickListener {
+                val intent = Intent(itemView.context, Jobdetails::class.java).apply {
+                    putExtra("jobTitle", job.jobTitle)
+                    putExtra("location", job.location)
+                    putExtra("companyName", job.companyName)
+                    putExtra("experience", job.experience)
+                    putExtra("publishDate", job.publishDate)
+                    putExtra("viewersCount", job.viewersCount)
+                    putExtra("isFavorite", job.isFavorite)
+                    putExtra("salary", job.salary)
+                    putExtra("schedules", ArrayList(job.schedules)) // Pass list as ArrayList
+                    putExtra("appliedNumber", job.appliedNumber) // Handle null value in Jobdetails
+                    putExtra("description", job.description)
+                    putExtra("responsibilities", job.responsibilities) // Ensure this is a String
+                    putExtra("questions", ArrayList(job.questions)) // Pass list as ArrayList
+                }
+                itemView.context.startActivity(intent)
+            }
         }
     }
 
